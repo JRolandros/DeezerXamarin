@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OneDeezer.Views.OneDeezerView">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <StackLayout Orientation="Horizontal" Grid.Row="0">
+      <Entry Placeholder="Tapez votre recherche ici" HorizontalOptions="Fill" Text="{Binding SearchText}"/>
+      <Button Text="Search" Command="{Binding CommandBtnSeachClick}"/>
+    </StackLayout>
+    <ListView Grid.Row="1" x:Name="dd" ItemsSource="{Binding ListArtist}" HasUnevenRows="True">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <Image Source="{Binding picture}" WidthRequest="50" HeightRequest="50" Aspect="AspectFit"/>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </Grid>
+</ContentPage>
