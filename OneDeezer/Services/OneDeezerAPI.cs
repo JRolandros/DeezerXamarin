@@ -16,6 +16,7 @@ namespace OneDeezer.Services
             using (var client = new HttpClient())
             {
  
+
                 try
                 {
                     var jsonResult = await client.GetStringAsync("https://api.deezer.com/search?q=" + Uri.EscapeUriString(text));
