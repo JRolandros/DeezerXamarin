@@ -8,7 +8,9 @@ namespace OneDeezer.Services
 {
     public interface IAudioService
     {
-        void playAudio();
+        Boolean IsPlaying();
+        void playAudio(string filePath);
+        void MediaPause();
         void playVideo();
         void stopAudio();
         void stopVideo();

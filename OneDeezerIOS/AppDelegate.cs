@@ -1,12 +1,23 @@
 ﻿using Foundation;
+using OneDeezer.Views;
+using System.IO;
 using UIKit;
+
+using XLabs.Forms;
+using XLabs.Forms.Services;
+using XLabs.Ioc;
+using XLabs.Platform.Device;
+using XLabs.Platform.Mvvm;
+using XLabs.Platform.Services;
+using XLabs.Platform.Services.Email;
+using XLabs.Platform.Services.Media;
 
 namespace OneDeezerIOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the
     // User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
     [Register("AppDelegate")]
-    public class AppDelegate : UIApplicationDelegate
+    public class AppDelegate : XFormsApplicationDelegate
     {
         // class-level declarations
 
@@ -16,19 +27,46 @@ namespace OneDeezerIOS
             set;
         }
 
-        public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            this.SetIoc();
             // create a new window instance based on the screen size
-            Window = new UIWindow(UIScreen.MainScreen.Bounds);
+            global::Xamarin.Forms.Forms.Init();
+            LoadApplication(new App());
 
-            // If you have defined a root view controller, set it here:
-            // Window.RootViewController = myViewController;
-
-            // make the window visible
-            Window.MakeKeyAndVisible();
-
-            return true;
+            return base.FinishedLaunching(app, options);
         }
+
+
+        private void SetIoc()
+        {
+            var resolverContainer = new SimpleContainer();
+
+            var app = new XFormsAppiOS();
+            app.Init(this);
+
+            var documents = app.AppDataDirectory;
+            var pathToDatabase = Path.Combine(documents, "oneDeezerDB.db");
+
+            resolverContainer.Register<IDevice>(t => AppleDevice.CurrentDevice)
+                .Register<IDisplay>(t => t.Resolve<IDevice>().Display)
+                .Register<IFontManager>(t => new FontManager(t.Resolve<IDisplay>()))
+                //.Register<IJsonSerializer, XLabs.Serialization.ServiceStack.JsonSerializer>()
+                //.Register<IJsonSerializer, Services.Serialization.SystemJsonSerializer>()
+                .Register<ITextToSpeechService, TextToSpeechService>()
+                .Register<IEmailService, EmailService>()
+                .Register<IMediaPicker, MediaPicker>()
+                .Register<IXFormsApp>(app)
+                .Register<ISecureStorage, SecureStorage>()
+                .Register<IDependencyContainer>(t => resolverContainer)
+                //.Register<ISimpleCache>(
+                //    t => new SQLiteSimpleCache(new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS(),
+                //        new SQLite.Net.SQLiteConnectionString(pathToDatabase, true), t.Resolve<IJsonSerializer>()))
+                ;
+
+            Resolver.SetResolver(resolverContainer.GetResolver());
+        }
+
 
         public override void OnResignActivation(UIApplication application)
         {

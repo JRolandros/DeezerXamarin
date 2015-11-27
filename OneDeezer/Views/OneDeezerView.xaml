@@ -1,24 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="OneDeezer.Views.OneDeezerView">
+             xmlns:controls="clr-namespace:OneDeezer.Controls;assembly=OneDeezer"
+             x:Class="OneDeezer.Views.OneDeezerView"
+             x:Name="oneD"
+             Title="OneDeezer Search">
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
+    
     <StackLayout Orientation="Horizontal" Grid.Row="0">
-      <Entry Placeholder="Tapez votre recherche ici" HorizontalOptions="Fill" Text="{Binding SearchText}"/>
-      <Button Text="Search" Command="{Binding CommandBtnSeachClick}"/>
+      <Entry Placeholder="Tapez votre recherche ici" HorizontalOptions="StartAndExpand" Text="{Binding SearchText}"/>
+      <Button Text="Search" Command="{Binding SearchCommand}"/>
     </StackLayout>
-    <ListView Grid.Row="1" x:Name="dd" ItemsSource="{Binding ListArtist}" HasUnevenRows="True">
+    <ScrollView Grid.Row="1">
+    <ListView  x:Name="playList" ItemsSource="{Binding ListArtist}" HasUnevenRows="True">
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell>
-            <Image Source="{Binding picture}" WidthRequest="50" HeightRequest="50" Aspect="AspectFit"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+              <Image Source="{Binding artist.picture}" WidthRequest="50" HeightRequest="50" Aspect="AspectFit"/>
+              <Label Text="{Binding artist.name}" />
+              <Label Text=": "/>
+              <Label Text="{Binding title}" HorizontalOptions="StartAndExpand"/>
+              <Label x:Name="prev" Text="{Binding preview}" IsVisible="False"/>
+              <Image  x:Name="imgPlay" Source="{Binding BindingContext.Play, Source={x:Reference oneD}}" HorizontalOptions="End" WidthRequest="50" HeightRequest="50" Aspect="AspectFit">
+                <Image.GestureRecognizers>
+                  <TapGestureRecognizer Command="{Binding BindingContext.PlayCommand, Source={x:Reference oneD} }" CommandParameter="{Binding .}" />
+                </Image.GestureRecognizers>
+              </Image>
+            </StackLayout>
           </ViewCell>
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
+    </ScrollView>
+    <controls:pub Grid.Row="2"/>
   </Grid>
 </ContentPage>

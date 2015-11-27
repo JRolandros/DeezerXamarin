@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:OneDeezer.Controls;assembly=OneDeezer"
+             x:Class="OneDeezer.Views.ArtistView"
+             BackgroundColor="White"
+             x:Name="artisteView"
+             Title="{Binding Artist.name}">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    
+    <ScrollView>
+      <StackLayout Spacing="10" HorizontalOptions="FillAndExpand">
+        <AbsoluteLayout HorizontalOptions="FillAndExpand">
+          <Image Source="{Binding Artist.picture_big}" Aspect="AspectFill" WidthRequest="358" HeightRequest="550" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" />
+          <StackLayout BackgroundColor="Transparent" Padding="10,5">
+            <Label x:Name="ArtistName" Opacity="0" Text="{Binding Artist.name}" TextColor="#DECDDD" FontSize="30"
+                   TranslationX="10" TranslationY="10" />
+          </StackLayout>
+      </AbsoluteLayout>
+        <Label Text="{Binding Artist.tracklist}" LineBreakMode="WordWrap"
+               TextColor="Green"/>
+      </StackLayout>
+    </ScrollView>
+
+    <controls:ArtistViewPub Mp3="{Binding Preview}" Grid.Row="1" />
+  </Grid>
+</ContentPage>

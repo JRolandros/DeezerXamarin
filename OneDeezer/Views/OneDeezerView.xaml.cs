@@ -1,4 +1,5 @@
-﻿using OneDeezer.ViewModels;
+﻿using OneDeezer.Services;
+using OneDeezer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,23 @@ namespace OneDeezer.Views
 {
     public partial class OneDeezerView : ContentPage
     {
+        private OneDeezerViewModel context { get { return BindingContext as OneDeezerViewModel; } }
+
         public OneDeezerView()
         {
             InitializeComponent();
-            this.BindingContext = new OneDeezerViewModel();
+            this.BindingContext = context;
+                
+            playList.ItemTapped += (o, e) => {
+                //MessagingCenter.Send<OneDeezerSearchResult>((OneDeezerSearchResult)e.Item, "showArtist");
+
+                context.ArtistDetailCommand.Execute(e.Item);
+
+                //App.Current.MainPage=new NavigationPage(new ArtistView());
+            };
             
+            
+
         }
     }
 }

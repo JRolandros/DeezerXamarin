@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:CustomControls="clr-namespace:OneDeezer.CustomControls;assembly=OneDeezer"
+             x:Class="OneDeezer.Controls.ArtistViewPub">
+  <StackLayout Orientation="Horizontal" Spacing="30" HorizontalOptions="CenterAndExpand">
+    
+    <CustomControls:CustomLabel  FontName="fontawesome" Text="" FontSize="50" TextColor="#FF8100">
+      <Label.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding PlayCommand}"/>
+      </Label.GestureRecognizers>
+    </CustomControls:CustomLabel>
+
+    <CustomControls:CustomLabel  FontName="fontawesome" Text="" FontSize="50" TextColor="#FF8100">
+      <Label.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding PlayCommand}"/>
+      </Label.GestureRecognizers>
+    </CustomControls:CustomLabel>
+    
+    <CustomControls:CustomLabel  FontName="fontawesome" Text="" FontSize="50" TextColor="#FF8100">
+      <Label.GestureRecognizers>
+        <TapGestureRecognizer Command="{Binding PlayCommand}"/>
+      </Label.GestureRecognizers>
+    </CustomControls:CustomLabel>
+    
+  </StackLayout>
+</Grid>

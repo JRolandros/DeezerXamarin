@@ -6,11 +6,26 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using SQLite.Net.Attributes;
+using OneDeezer.Data;
 
 namespace OneDeezer.Services
 {
     public class OneDeezerAPI
     {
+        class ArtistEqualityComparer : IEqualityComparer<Artist>
+        {
+            public bool Equals(Artist x, Artist y)
+            {
+                return x.id == y.id;
+            }
+
+            public int GetHashCode(Artist obj)
+            {
+                return obj.GetHashCode();
+            }
+        }
+
         public async Task<List<OneDeezerSearchResult>> search(string text)
         {
             using (var client = new HttpClient())
@@ -20,8 +35,33 @@ namespace OneDeezer.Services
                 try
                 {
                     var jsonResult = await client.GetStringAsync("https://api.deezer.com/search?q=" + Uri.EscapeUriString(text));
-                   var dsr = JsonConvert.DeserializeObject<OneDeezerSearchResponse>(jsonResult);
-                    return dsr.data;
+                   var response= JsonConvert.DeserializeObject<OneDeezerSearchResponse>(jsonResult);
+
+
+
+                    //Met en cache les Artistes résultats
+                    //using (var db = new OneDBContext())
+                    //{
+                    //    foreach (var artist in response.data.Select(d => d.artist).Distinct())
+                    //    {
+                    //        var id = artist.id;
+                    //        if (!db.Table<Artist>().Where(a => a.id == id).Any())
+                    //        {
+                    //            try
+                    //            {
+                    //                db.Insert(artist);
+                    //            }
+                    //            catch (Exception e)
+                    //            {
+                    //                Debug.WriteLine(e.ToString());
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+
+
+                    return response.data;
                 }
                 catch (Exception e)
                 {
@@ -36,8 +76,10 @@ namespace OneDeezer.Services
         }
     }
 
+
     public class Artist
     {
+        [Indexed]
         public string id { get; set; }
         public string name { get; set; }
         public string link { get; set; }
@@ -76,6 +118,7 @@ namespace OneDeezer.Services
         public Artist artist { get; set; }
         public Album album { get; set; }
         public string type { get; set; }
+
     }
 
     public class OneDeezerSearchResponse
